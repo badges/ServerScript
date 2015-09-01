@@ -1,0 +1,19 @@
+#!/bin/bash
+
+while read oldrev newrev ref
+do
+  branch=`echo $ref | cut -d/ -f3`
+  if [ "$branch" == "master" ]; then
+    REPONAME=$(basename `pwd` | sed 's/\.git$//')
+    REPOPATH=$(echo `pwd` | sed 's/\.git$//')
+    echo "[$REPONAME] 1/3 Code update"
+    GIT_WORK_TREE="$REPOPATH" git checkout -f $branch
+    echo "[$REPONAME] 2/3 Server restart"
+    pushd "$REPOPATH"
+    npm install
+    forever restart server.js
+    forever restart https-server.sh
+    popd
+    echo "[$REPONAME] 3/3 Done"
+  fi
+done
