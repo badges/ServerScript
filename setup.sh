@@ -8,11 +8,15 @@ SHIELDS_REPO_DIR="$DIR/$SHIELDS_DIR.git"
 git clone --bare "https://github.com/badges/shields.git" "$SHIELDS_REPO_DIR"
 cp post-receive "$SHIELDS_REPO_DIR/hooks/post-receive"
 chmod +x "$SHIELDS_REPO_DIR/hooks/post-receive"
-GIT_WORK_TREE="$SHIELDS_DIR" git checkout -f master
+# I could not run a checkout of the bare repo on a different thing.
+# We have to push a new commit from our workstation.
+#GIT_WORK_TREE="$SHIELDS_DIR" git checkout -f master
+mkdir "$SHIELDS_DIR"
 cp https-server.sh "$SHIELDS_DIR"
 
 # Start the server for the first time.
-pushd "$SHIELDS_DIR"
-npm install
-popd
-./start.sh
+# (Note: see above; it will happen when pushing a new commit.)
+#pushd "$SHIELDS_DIR"
+#npm install
+#popd
+#./start.sh
