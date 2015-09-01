@@ -16,7 +16,8 @@ cp https-server.sh "$SHIELDS_DIR"
 
 # Start the server for the first time.
 # (Note: see above; it will happen when pushing a new commit.)
-#pushd "$SHIELDS_DIR"
+pushd "$SHIELDS_DIR"
 #npm install
-#popd
+mkdir -p log
+popd
 #./start.sh
