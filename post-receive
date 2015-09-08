@@ -11,8 +11,7 @@ do
     echo "[$REPONAME] 2/3 Server restart"
     pushd "$REPOPATH"
     npm install
-    forever restart server.js
-    forever restart https-server.sh
+    forever restartall
     popd
     echo "[$REPONAME] 3/3 Done"
   fi
