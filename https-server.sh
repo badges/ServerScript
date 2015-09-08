@@ -1,3 +1,5 @@
 #!/bin/bash
 DIR=$(dirname "${BASH_SOURCE[0]}")
-HTTPS=true node "$DIR"/server.js
+export HTTPS=true
+export SHIELDS_ANALYTICS_FILE="$DIR"/analytics-https.json
+node "$DIR"/server.js
