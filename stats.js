@@ -23,27 +23,18 @@ var request = function(options) {
   });
 };
 
-Promise.all([
-  request({
-    hostname: 'img.shields.io',
-    port: 80,
-    path: '/$analytics/v1'
-  }),
-  request({
-    hostname: 'img.shields.io',
-    port: 443,
-    path: '/$analytics/v1'
-  }),
-]).then(function(stats) {
+request({
+  hostname: 'img.shields.io',
+  port: 443,
+  path: '/$analytics/v1'
+}).then(function(stats) {
   var sumType = function(a, b) {
     return a.map(function(e, i) { return e + b[i]; });
   };
-  var httpTotals = sumType(stats[0].vendorMonthly, stats[0].rawMonthly);
-  var httpsTotals = sumType(stats[1].vendorMonthly, stats[1].rawMonthly);
+  var httpsTotals = sumType(stats.vendorMonthly, stats.rawMonthly);
   var sum = function(a, b) { return a + b; };
-  var httpTotal = httpTotals.reduce(sum);
   var httpsTotal = httpsTotals.reduce(sum);
-  var total = httpTotal + httpsTotal;
+  var total = httpsTotal;
   console.log(total);
 }).catch(function(err) {
   throw err;
