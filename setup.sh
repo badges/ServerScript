@@ -12,7 +12,6 @@ chmod +x "$SHIELDS_REPO_DIR/hooks/post-receive"
 # We have to push a new commit from our workstation.
 #GIT_WORK_TREE="$SHIELDS_DIR" git checkout -f master
 mkdir "$SHIELDS_DIR"
-cp https-server.sh "$SHIELDS_DIR"
 
 # Start the server for the first time.
 # (Note: see above; it will happen when pushing a new commit.)
