@@ -23,11 +23,39 @@ var request = function(options) {
   });
 };
 
+var mergeArray = function(a1, a2) {
+  for (var i = 0; i < a1; i++) {
+    a1[i] += a2[i];
+  }
+  return a1;
+};
+var mergeStats = function(stat, stat2) {
+  for (var key in stat) {
+    if (Object(stat[key]) instanceof Array) {
+      stat[key] = mergeArray(stat[key], stat2[key]);
+    } else if (Object(stat[key]) instanceof Object) {
+      stat[key] = mergeStats(stat[key], stat2[key]);
+    }
+  }
+  return stat;
+};
+
+var stats;
 request({
-  hostname: 'img.shields.io',
+  hostname: 'vps197850.ovh.net',
   port: 443,
+  rejectUnauthorized: false,
   path: '/$analytics/v1'
-}).then(function(stats) {
+}).then(function(stats1) {
+  stats = stats1;
+  return request({
+    hostname: 'vps244529.ovh.net',
+    port: 443,
+    rejectUnauthorized: false,
+    path: '/$analytics/v1'
+  });
+}).then(function(stats2) {
+  stats = mergeStats(stats, stats2);
   var sumType = function(a, b) {
     return a.map(function(e, i) { return e + b[i]; });
   };
@@ -37,5 +65,6 @@ request({
   var total = httpsTotal;
   console.log(total);
 }).catch(function(err) {
+  console.error(err.stack);
   throw err;
 });
