@@ -24,7 +24,8 @@ var request = function(options) {
 };
 
 var mergeArray = function(a1, a2) {
-  for (var i = 0; i < a1; i++) {
+  var len = a1.length;
+  for (var i = 0; i < len; i++) {
     a1[i] += a2[i];
   }
   return a1;
