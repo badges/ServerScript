@@ -43,7 +43,7 @@ var mergeStats = function(stat, stat2) {
 
 var stats;
 request({
-  hostname: 'vps197850.ovh.net',
+  hostname: 'vps71670.vps.ovh.ca',
   port: 443,
   rejectUnauthorized: false,
   path: '/$analytics/v1'
