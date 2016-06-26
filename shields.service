@@ -1,0 +1,9 @@
+[Unit]
+Description=Shields.io HTTPS server
+
+[Service]
+ExecStart=/home/m/start-shields.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

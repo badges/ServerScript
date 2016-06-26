@@ -1,5 +1,5 @@
 #!/bin/bash
-# We need git, node, npm, forever
+# We need git, node, npm, systemd
 
 # Set up the git repository and the live directory.
 DIR=$(dirname "${BASH_SOURCE[0]}")
@@ -13,10 +13,17 @@ chmod +x "$SHIELDS_REPO_DIR/hooks/post-receive"
 #GIT_WORK_TREE="$SHIELDS_DIR" git checkout -f master
 mkdir "$SHIELDS_DIR"
 
+# Set up the systemd services.
+sudo cp "$DIR"/shields.service /etc/systemd/system/
+sudo cp "$DIR"/shields-redirect.service /etc/systemd/system/
+sudo systemctl daemon-reload
+
 # Start the server for the first time.
 # (Note: see above; it will happen when pushing a new commit.)
 pushd "$SHIELDS_DIR"
 #npm install
 mkdir -p log
 popd
-#./start.sh
+
+sudo systemctl start shields.service
+sudo systemctl start shields-redirect.service
