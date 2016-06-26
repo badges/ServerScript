@@ -25,5 +25,4 @@ pushd "$SHIELDS_DIR"
 mkdir -p log
 popd
 
-sudo systemctl start shields.service
-sudo systemctl start shields-redirect.service
+sudo systemctl restart shields.service shields-redirect.service

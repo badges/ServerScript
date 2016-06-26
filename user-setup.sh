@@ -18,7 +18,6 @@ apt-get install build-essential git libssl-dev phantomjs libjpeg-turbo8-dev libc
 mkdir node-js && cd node-js && wget -Nq "http://nodejs.org/dist/node-latest.tar.gz" && tar xzf node-latest.tar.gz && cd node-v* && ./configure && make
 # Then, as root:
 make install && cd ../.. && rm -rf node-js
-npm install -g forever
 
 # For convenience, we will allow git to push.
 echo 'command="git-shell",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAbase64' >> ~/.ssh/authorized_keys

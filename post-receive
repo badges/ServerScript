@@ -12,9 +12,7 @@ do
     pushd "$REPOPATH"
     npm install
     popd
-    pushd "$REPOPATH"/..
-    forever stopall && "$REPOPATH"/../start.sh
-    popd
+    systemctl restart shields.service shields-redirect.service
     echo "[$REPONAME] 3/3 Done"
   fi
 done
