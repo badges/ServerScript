@@ -10,8 +10,7 @@ passwd m
 
 # Add necessary packages.
 apt-get update
-apt-get install build-essential git libssl-dev phantomjs libjpeg-turbo8-dev libcairo2-dev
-# Installing phantomjs on debian will be a pain. sorry.
+apt-get install build-essential git libssl-dev imagemagick
 
 # We will now build the latest node. As a safeguard (for an accidental rm in the
 # make script), we will log in as m.
