@@ -10,7 +10,8 @@ passwd m
 
 # Add necessary packages.
 apt-get update
-apt-get install build-essential git libssl-dev imagemagick
+# python is used by node.js installation scripts.
+apt-get install build-essential git python libssl-dev imagemagick
 
 # We will now build the latest node. As a safeguard (for an accidental rm in the
 # make script), we will log in as m.
