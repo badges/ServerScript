@@ -1,8 +1,6 @@
 #!/bin/bash
 # We need git, node, npm, systemd
 
-su m
-
 # Set up the git repository and the live directory.
 DIR=$(dirname "${BASH_SOURCE[0]}")
 SHIELDS_DIR="$DIR/shields"
@@ -22,11 +20,16 @@ pushd "$SHIELDS_DIR"
 mkdir -p log
 popd
 
-exit  # Come back to root.
-
 # Set up the systemd services.
-cp "$DIR"/shields.service /etc/systemd/system/
-cp "$DIR"/shields-redirect.service /etc/systemd/system/
-systemctl daemon-reload
+sudo cp "$DIR"/shields.service /etc/systemd/system/
+sudo cp "$DIR"/shields-redirect.service /etc/systemd/system/
+sudo systemctl daemon-reload
 
-systemctl restart shields.service shields-redirect.service
+sudo systemctl restart shields.service shields-redirect.service
+
+# Remove bower garbage.
+sudo cat > /etc/cron.hourly/bower-rm <<EOF
+#!/bin/bash
+/home/m/remove-bower-cache.sh
+EOF
+sudo chmod +x /etc/cron.hourly/bower-rm

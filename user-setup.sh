@@ -7,6 +7,7 @@ passwd
 # Then, create the secondary user.
 useradd --create-home --user-group --key UMASK=022 m
 passwd m
+usermod -aG sudo m
 
 # Add necessary packages.
 apt-get update
@@ -20,7 +21,7 @@ mkdir node-js && cd node-js && wget -Nq "http://nodejs.org/dist/node-latest.tar.
 make install && cd ../.. && rm -rf node-js
 
 # For convenience, we will allow git to push.
-echo 'command="git-shell",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAbase64' >> ~/.ssh/authorized_keys
+#echo 'command="git-shell",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAbase64' >> ~/.ssh/authorized_keys
 
 # Now, we can download shields.
 git clone https://github.com/badges/ServerScript.git
@@ -31,6 +32,7 @@ cp ServerScript/* .
 
 # We also need certificates, so, as root:
 cd shields/node_modules/camp
+rm https.*
 make https  # Answer the few questions
 cp https.crt ../..
 cp https.csr ../..
