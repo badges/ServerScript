@@ -1,6 +1,5 @@
 var http = require('http');
 var https = require('https');
-var promise = require('promise');
 var request = function(options) {
   return new Promise(function(resolve, reject) {
     var client = (options.port === 443) ? https : http;
