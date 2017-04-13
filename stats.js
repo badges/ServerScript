@@ -1,15 +1,22 @@
-var http = require('http');
-var https = require('https');
-var request = function(options) {
-  return new Promise(function(resolve, reject) {
-    var client = (options.port === 443) ? https : http;
-    var req = client.request(options, function(res) {
+let http = require('http');
+let https = require('https');
+
+const servers = [
+  'vps71670.vps.ovh.ca',
+  'vps244529.ovh.net',
+  'vps117870.vps.ovh.ca',
+];
+
+function request(options) {
+  return new Promise((resolve, reject) => {
+    let client = (options.port === 443) ? https : http;
+    let req = client.request(options, res => {
       res.setEncoding('utf8');
-      var body = '';
-      res.on('data', function(chunk) {
+      let body = '';
+      res.on('data', chunk => {
         body += '' + chunk;
       });
-      res.on('end', function() {
+      res.on('end', () => {
         try {
           resolve(JSON.parse(body));
         } catch(err) {
@@ -17,54 +24,43 @@ var request = function(options) {
         }
       });
     });
-    req.on('error', function(err) { reject(err); });
+    req.on('error', reject);
     req.end();
+  });
+}
+
+function mergeArrays(arrays) {
+  return arrays.reduce((acc, array) =>
+    acc.map((item, i) => item + array[i]));
+}
+
+function mergeStats(stats) {
+  return stats.reduce((acc, stat) => {
+    for (const key in acc) {
+      if (Object(acc[key]) instanceof Array) {
+        acc[key] = mergeArrays([acc[key], stat[key]]);
+      } else if (Object(acc[key]) instanceof Object) {
+        acc[key] = mergeStats([acc[key], stat[key]]);
+      }
+    }
+    return acc;
   });
 };
 
-var mergeArray = function(a1, a2) {
-  var len = a1.length;
-  for (var i = 0; i < len; i++) {
-    a1[i] += a2[i];
-  }
-  return a1;
-};
-var mergeStats = function(stat, stat2) {
-  for (var key in stat) {
-    if (Object(stat[key]) instanceof Array) {
-      stat[key] = mergeArray(stat[key], stat2[key]);
-    } else if (Object(stat[key]) instanceof Object) {
-      stat[key] = mergeStats(stat[key], stat2[key]);
-    }
-  }
-  return stat;
-};
-
-var stats;
-request({
-  hostname: 'vps71670.vps.ovh.ca',
-  port: 443,
-  rejectUnauthorized: false,
-  path: '/$analytics/v1'
-}).then(function(stats1) {
-  stats = stats1;
+function getServerAnalytics(server) {
   return request({
-    hostname: 'vps244529.ovh.net',
+    hostname: server,
     port: 443,
     rejectUnauthorized: false,
     path: '/$analytics/v1'
   });
-}).then(function(stats2) {
-  stats = mergeStats(stats, stats2);
-  var sumType = function(a, b) {
-    return a.map(function(e, i) { return e + b[i]; });
-  };
-  var httpsTotals = sumType(stats.vendorMonthly, stats.rawMonthly);
-  var sum = function(a, b) { return a + b; };
-  var httpsTotal = httpsTotals.reduce(sum);
-  var total = httpsTotal;
-  console.log(total);
-}).catch(function(err) {
-  console.error(err.stack);
-  throw err;
-});
+}
+
+Promise.all(servers.map(getServerAnalytics))
+.then(stats => {
+  let stat = mergeStats(stats);
+  let dailyTotal = mergeArrays([stat.vendorMonthly, stat.rawMonthly]);
+  let monthlyTotal = dailyTotal.reduce((a, b) => a + b);
+  console.log(monthlyTotal);
+})
+.catch(err => {console.error(err); process.exit(1)});
