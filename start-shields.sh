@@ -5,4 +5,5 @@ SHIELDS_DIR="$DIR/shields"
 cd "$SHIELDS_DIR"
 export HTTPS=true
 export SHIELDS_ANALYTICS_FILE="$SHIELDS_DIR"/analytics-https.json
-node ./server.js >> log/out 2>&1
+node ./server.js >> log/out \
+  2> >( while read line; do date -u >> log/out; echo "$line" >> log/out; done )
