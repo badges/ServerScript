@@ -45,7 +45,7 @@ function mergeStats(stats) {
     }
     return acc;
   });
-};
+}
 
 function getServerAnalytics(server) {
   return request({
@@ -63,4 +63,4 @@ Promise.all(servers.map(getServerAnalytics))
   let monthlyTotal = dailyTotal.reduce((a, b) => a + b);
   console.log(monthlyTotal);
 })
-.catch(err => {console.error(err); process.exit(1)});
+.catch(err => {console.error(err); process.exit(1);});
