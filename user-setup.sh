@@ -21,7 +21,7 @@ mkdir node-js && cd node-js && wget -Nq "http://nodejs.org/dist/node-latest.tar.
 make install && cd ../.. && rm -rf node-js
 
 # For convenience, we will allow git to push.
-#echo 'command="git-shell",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAbase64' >> ~/.ssh/authorized_keys
+#echo 'command="git-shell -c \"$SSH_ORIGINAL_COMMAND\"",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAbase64' >> ~/.ssh/authorized_keys
 
 # Now, we can download shields.
 git clone https://github.com/badges/ServerScript.git
